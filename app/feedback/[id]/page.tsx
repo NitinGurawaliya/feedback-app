@@ -1,36 +1,56 @@
-import Navbar from "@/components/common/Navbar";
-import { Step1 } from "@/components/FeedbackPages/Step1";
-import axios from "axios";
+
+
+import FeedbackFlow from "@/components/FeedbackPages/FeedbackFlow";
 import { Suspense } from "react";
 
+interface Pageprops {
+  params: Promise<{
+    id: string;
+  }>;
+}
 
-interface Pageprops{
-    params:Promise<{
-        id:string
-    }>
+interface RestaurantDetails {
+
+  id?: string | number;
+  name?: string;
+  logo:string
+  location:string
+}
+
+async function FeedbackContent({ params }: Pageprops) {
+  const { id } = await params;
+
+  let restaurant: RestaurantDetails | null = null;
+
+  try {
+    const response = await fetch(
+      `https://dineinn-tier2-iota.vercel.app/api/restaurant/details/${id}`,
+      { cache: "no-store" }
+    );
+    
+    if (response.ok) {
+      
+      const data = await response.json();
+      restaurant = {
+        id,
+        name:data.info.restaurantName,
+        logo:data.info.logo,
+        location:data.info.location
+      }
+
+      console.log(restaurant)
+
+    }
+  } catch {
+    restaurant = null;
+  }
+  return <FeedbackFlow restaurantId={id} restaurant={restaurant} />;
 }
 
 export default function FeedbackPage({ params }: Pageprops) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading feedback...</div>}>
       <FeedbackContent params={params} />
     </Suspense>
   );
-}
-
-
-async function FeedbackContent({ params }:Pageprops) {
-  const { id } = await params;
-
-  const res = await axios.get("http://localhost:3001/api/restaurant/details/1")
-
-  const data = res.data;
-
-  console.log(data)
-
-
-
-    return <div>
-      <Step1 />
-    </div>;
 }

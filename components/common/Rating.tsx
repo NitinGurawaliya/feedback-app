@@ -7,7 +7,17 @@ const feedbackOptions = [
   { label: "Okay", emoji: "😐" },
   { label: "Good", emoji: "😊" },
   { label: "Loved it", emoji: "😍" },
-];
+] as const;
+
+export type FeedbackRating = (typeof feedbackOptions)[number]["label"];
+
+interface RatingProps {
+  onSubmit?: (payload: {
+    rating: FeedbackRating;
+    tags: string[];
+    message: string;
+  }) => void;
+}
 
 const tags = [
   "Food quality",
@@ -18,7 +28,7 @@ const tags = [
   "Cleanliness",
 ];
 
-const Rating = () => {
+const Rating = ({ onSubmit }: RatingProps) => {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [message, setMessage] = useState("");
@@ -29,6 +39,18 @@ const Rating = () => {
         ? prev.filter((t) => t !== tag)
         : [...prev, tag]
     );
+  };
+
+  const handleContinue = () => {
+    if (selectedRating === null) {
+      return;
+    }
+
+    onSubmit?.({
+      rating: feedbackOptions[selectedRating].label,
+      tags: selectedTags,
+      message,
+    });
   };
 
   return (
@@ -115,6 +137,8 @@ const Rating = () => {
 
               <div className="px-5 py-4 border-t bg-white">
         <button
+          type="button"
+          onClick={handleContinue}
           disabled={selectedRating === null}
           className={`w-full py-3.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition
             ${

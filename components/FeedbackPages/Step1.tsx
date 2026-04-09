@@ -1,9 +1,22 @@
 import Navbar from "../common/Navbar"
-import Rating from "../common/Rating"
+import Rating, { FeedbackRating } from "../common/Rating"
 
-export const Step1 = ()=>{
+interface Step1Props {
+    restaurant?: {
+        name?: string;
+        logo?: string;
+        location?: string;
+    } | null;
+    onSubmit?: (payload: {
+        rating: FeedbackRating;
+        tags: string[];
+        message: string;
+    }) => void;
+}
+
+export const Step1 = ({ restaurant, onSubmit }: Step1Props)=>{
     return <div>
-        <Navbar />
-        <Rating />
+        <Navbar restaurant={restaurant} />
+        <Rating onSubmit={onSubmit} />
     </div>
 }

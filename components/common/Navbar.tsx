@@ -1,4 +1,18 @@
-const Navbar = () => {
+interface NavbarProps {
+  restaurant?: {
+    name?: string;
+    logo?: string;
+    location?: string;
+  } | null;
+}
+
+const Navbar = ({ restaurant }: NavbarProps) => {
+  const restaurantName = restaurant?.name ?? "Restaurant";
+  const restaurantLocation = restaurant?.location ?? "";
+  const restaurantLogo =
+    restaurant?.logo ??
+    "https://res.cloudinary.com/dixjcb4on/image/upload/v1741629142/dishes_image/hillPoint_logo.png";
+
   return (
     <nav className="bg-white w-full border-b border-gray-200">
       <div className="flex items-center justify-between px-4 py-3">
@@ -7,18 +21,18 @@ const Navbar = () => {
           
           <div className="h-16 w-16 rounded-full overflow-hidden bg-green-500 flex items-center justify-center">
             <img
-              src="https://res.cloudinary.com/dixjcb4on/image/upload/v1741629142/dishes_image/hillPoint_logo.png"
+              src={restaurantLogo}
               className="h-full w-full object-cover"
-              alt="Restaurant Logo"
+              alt={`${restaurantName} logo`}
             />
           </div>
 
           <div className="leading-tight">
             <p className="text-sm font-semibold text-gray-900">
-              Hill Point
+              {restaurantName}
             </p>
             <p className="text-xs text-gray-500">
-              Solan
+              {restaurantLocation}
             </p>
           </div>
         </div>
