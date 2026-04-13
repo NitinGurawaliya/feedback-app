@@ -2,14 +2,9 @@
 
 import { useState } from "react";
 import Input from "../common/Input";
+import { NegativeStepProps } from "@/interface";
 
-interface NegativeStepProps {
-  onSubmit?: (payload: {
-    feedback: string;
-    phone: string;
-    name: string;
-  }) => void;
-}
+
 
 const NegativeStep = ({ onSubmit }: NegativeStepProps) => {
   const [feedback, setFeedback] = useState("");
@@ -85,7 +80,7 @@ const NegativeStep = ({ onSubmit }: NegativeStepProps) => {
           Your privacy matters. Your phone number is only shared with the restaurant
           management team to resolve your concern.
         </p>
-            <div className="px-5 py-4 border-t bg-white">
+            <div className="px-5 py-4  bg-white">
         <button
           type="button"
           onClick={handleContinue}
@@ -102,7 +97,6 @@ const NegativeStep = ({ onSubmit }: NegativeStepProps) => {
       </div>
       </div>
 
-      {/* Fixed Bottom Button */}
     </div>
   );
 };

@@ -15,11 +15,11 @@ const Navbar = ({ restaurant }: NavbarProps) => {
 
   return (
     <nav className="bg-white w-full border-b border-gray-200">
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className="flex items-center justify-between px-2 py-2">
         
         <div className="flex items-center gap-2">
           
-          <div className="h-16 w-16 rounded-full overflow-hidden bg-green-500 flex items-center justify-center">
+          <div className="h-14 w-14 rounded-full overflow-hidden bg-green-500 flex items-center justify-center">
             <img
               src={restaurantLogo}
               className="h-full w-full object-cover"

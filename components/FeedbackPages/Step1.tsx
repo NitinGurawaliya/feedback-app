@@ -1,5 +1,6 @@
 import Navbar from "../common/Navbar"
-import Rating, { FeedbackRating } from "../common/Rating"
+import Rating from "../common/Rating"
+import { FeedbackRating } from "@/interface";
 
 interface Step1Props {
     restaurant?: {

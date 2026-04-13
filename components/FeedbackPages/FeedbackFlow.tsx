@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Step1 } from "./Step1";
 import Step1N from "./Step1A";
 import ThankYouStep from "./ThankYouStep";
-import { FeedbackRating } from "../common/Rating";
+import { FeedbackRating } from "@/interface";
 
 type CurrentStep = "step1" | "step1A" | "thankyou";
 
@@ -18,6 +18,7 @@ interface FeedbackFlowProps {
   } | null;
 }
 
+
 const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const [currentStep, setCurrentStep] = useState<CurrentStep>("step1");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -28,6 +29,7 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
     message: string;
   }) => {
     const isPositive = payload.rating === "Good" || payload.rating === "Loved it";
+
 
     if (isPositive) {
       setIsReviewModalOpen(true);
@@ -74,7 +76,7 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
                 className="w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-medium hover:opacity-90 transition"
               >
                 Go to Google Review
-              </button>
+              </button> 
               <button
                 type="button"
                 onClick={() => setIsReviewModalOpen(false)}

@@ -1,32 +1,8 @@
 "use client";
 import { useState } from "react";
-
-const feedbackOptions = [
-  { label: "Terrible", emoji: "😠" },
-  { label: "Bad", emoji: "🙁" },
-  { label: "Okay", emoji: "😐" },
-  { label: "Good", emoji: "😊" },
-  { label: "Loved it", emoji: "😍" },
-] as const;
-
-export type FeedbackRating = (typeof feedbackOptions)[number]["label"];
-
-interface RatingProps {
-  onSubmit?: (payload: {
-    rating: FeedbackRating;
-    tags: string[];
-    message: string;
-  }) => void;
-}
-
-const tags = [
-  "Food quality",
-  "Service speed",
-  "Staff behavior",
-  "Ambience",
-  "Value for money",
-  "Cleanliness",
-];
+import { feedbackOptions } from "@/constants";
+import { RatingProps } from "@/interface";
+import { foodTags } from "@/constants";
 
 const Rating = ({ onSubmit }: RatingProps) => {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
@@ -54,7 +30,7 @@ const Rating = ({ onSubmit }: RatingProps) => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-white max-w-md mx-auto">
+    <div className="h-full flex flex-col bg-white max-w-md mx-auto">
       
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto px-5 pt-8 pb-24 space-y-10">
@@ -101,13 +77,13 @@ const Rating = ({ onSubmit }: RatingProps) => {
             What stood out today?
           </p>
           <div className="flex flex-wrap gap-2">
-            {tags.map((tag) => {
+            {foodTags.map((tag) => {
               const active = selectedTags.includes(tag);
               return (
                 <button
                   key={tag}
                   onClick={() => toggleTag(tag)}
-                  className={`px-4 py-2 text-sm rounded-full border transition
+                  className={`px-3 py-2 text-xs rounded-full border transition
                     ${
                       active
                         ? "bg-gray-900 text-white border-gray-900"
@@ -135,7 +111,7 @@ const Rating = ({ onSubmit }: RatingProps) => {
         </div>
 
 
-              <div className="px-5 py-4 border-t bg-white">
+        <div className="px-5 py-2 bg-white">
         <button
           type="button"
           onClick={handleContinue}
@@ -151,9 +127,6 @@ const Rating = ({ onSubmit }: RatingProps) => {
         </button>
       </div>
       </div>
-
-      {/* Fixed Bottom Button */}
-
     </div>
   );
 };
