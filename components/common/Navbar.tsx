@@ -1,10 +1,5 @@
-interface NavbarProps {
-  restaurant?: {
-    name?: string;
-    logo?: string;
-    location?: string;
-  } | null;
-}
+import { NavbarProps } from "@/interface";
+
 
 const Navbar = ({ restaurant }: NavbarProps) => {
   const restaurantName = restaurant?.name ?? "Restaurant";

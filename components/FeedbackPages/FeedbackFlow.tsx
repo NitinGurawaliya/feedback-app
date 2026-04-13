@@ -2,22 +2,11 @@
 
 import { useState } from "react";
 import { Step1 } from "./Step1";
-import Step1N from "./Step1A";
+import Step1N from "./Step1N";
 import ThankYouStep from "./ThankYouStep";
-import { FeedbackRating } from "@/interface";
+import { FeedbackFlowProps, FeedbackRating } from "@/interface";
 
 type CurrentStep = "step1" | "step1A" | "thankyou";
-
-interface FeedbackFlowProps {
-  restaurantId?: string;
-  restaurant?: {
-    id?: string | number;
-    name?: string;
-    logo?: string;
-    location?: string;
-  } | null;
-}
-
 
 const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const [currentStep, setCurrentStep] = useState<CurrentStep>("step1");

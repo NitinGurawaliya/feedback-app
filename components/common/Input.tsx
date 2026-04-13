@@ -1,14 +1,7 @@
 // components/ui/Input.tsx
 
+import type { InputProps } from "@/interface";
 import React from "react";
-
-type InputProps = {
-  label?: string;
-  placeholder?: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  textarea?: boolean;
-};
 
 const Input = ({
   label,

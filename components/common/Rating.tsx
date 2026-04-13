@@ -37,7 +37,7 @@ const Rating = ({ onSubmit }: RatingProps) => {
         
         {/* Heading */}
         <div className="text-center space-y-2">
-          <h2 className="text-lg font-semibold text-gray-900">
+          <h2 className="text-lg font-bold text-gray-900">
             How was your experience?
           </h2>
           <p className="text-sm text-gray-500">
@@ -73,7 +73,7 @@ const Rating = ({ onSubmit }: RatingProps) => {
 
         {/* Tags */}
         <div className="space-y-4">
-          <p className="text-sm font-medium text-gray-800">
+          <p className="text-sm font-semibold text-gray-700">
             What stood out today?
           </p>
           <div className="flex flex-wrap gap-2">
@@ -87,7 +87,7 @@ const Rating = ({ onSubmit }: RatingProps) => {
                     ${
                       active
                         ? "bg-gray-900 text-white border-gray-900"
-                        : "bg-gray-100 text-gray-700 border-gray-200"
+                        : "bg-white text-gray-700 border-gray-900"
                     }`}
                 >
                   {tag}

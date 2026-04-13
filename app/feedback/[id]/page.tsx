@@ -1,5 +1,5 @@
 
-
+import { RestaurantDetails } from "@/interface";
 import FeedbackFlow from "@/components/FeedbackPages/FeedbackFlow";
 import { Suspense } from "react";
 
@@ -9,13 +9,6 @@ interface Pageprops {
   }>;
 }
 
-interface RestaurantDetails {
-
-  id?: string | number;
-  name?: string;
-  logo:string
-  location:string
-}
 
 async function FeedbackContent({ params }: Pageprops) {
   const { id } = await params;

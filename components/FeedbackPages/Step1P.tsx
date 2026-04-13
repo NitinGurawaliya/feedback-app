@@ -5,7 +5,6 @@ const  StepPositive = () =>{
     return <div>
         <Navbar />
         <ReviewRedirect />
-
     </div>
 }
 

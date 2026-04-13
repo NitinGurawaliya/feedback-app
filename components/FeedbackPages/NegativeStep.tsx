@@ -4,8 +4,6 @@ import { useState } from "react";
 import Input from "../common/Input";
 import { NegativeStepProps } from "@/interface";
 
-
-
 const NegativeStep = ({ onSubmit }: NegativeStepProps) => {
   const [feedback, setFeedback] = useState("");
   const [phone, setPhone] = useState("");
