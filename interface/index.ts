@@ -10,6 +10,11 @@ export interface RestaurantDetails {
 }
 
 export interface RatingProps {
+  restaurant:{
+    name?: string;
+    logo?: string;
+    location?: string;
+  } | null;
   onSubmit?: (payload: {
     rating: FeedbackRating;
     tags: string[];
