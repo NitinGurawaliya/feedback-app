@@ -42,8 +42,8 @@ const Rating = ({ onSubmit,restaurant }: RatingProps) => {
         </div>
 
         {/* Rating Options */}
-        <div className="space-y-6">
-          <div className="flex flex-col items-center gap-10 pt-2 lg:flex-row lg:justify-center lg:gap-6">
+        <div className="space-y-4">
+          <div className="flex flex-col items-center gap-8 pt-2 lg:flex-row lg:justify-center lg:gap-6">
             {feedbackOptions.map((item, index) => (
               <button
                 key={index}
@@ -58,7 +58,7 @@ const Rating = ({ onSubmit,restaurant }: RatingProps) => {
                   <img
                     src={item.imageUrl}
                     alt={item.label}
-                    className="h-16 w-16 object-contain"
+                    className="h-14 w-14 object-contain"
                   />
                 </div>
                 <span className="text-center text-[11px] leading-tight text-gray-600">
