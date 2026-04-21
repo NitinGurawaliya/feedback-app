@@ -35,15 +35,15 @@ const Rating = ({ onSubmit,restaurant }: RatingProps) => {
       <div className="flex-1 overflow-y-auto px-5 pt-8 pb-24 space-y-10">
         
         {/* Heading */}
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-0">
           <h2 className="text-xl font-semibold text-gray-700">
             How was your experience with {restaurant?.name}?
           </h2>
         </div>
 
         {/* Rating Options */}
-        <div className="space-y-4">
-          <div className="flex flex-col items-center gap-8 pt-2 lg:flex-row lg:justify-center lg:gap-6">
+        <div className="space-y-2">
+          <div className="flex flex-col items-center gap-6 pt-2 lg:flex-row lg:justify-center lg:gap-6">
             {feedbackOptions.map((item, index) => (
               <button
                 key={index}
