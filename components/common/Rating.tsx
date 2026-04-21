@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
-import { feedbackOptions } from "@/constants";
+import { feedbackOptions, foodTags } from "@/constants";
 import { RatingProps } from "@/interface";
-import { foodTags } from "@/constants";
 
 const Rating = ({ onSubmit }: RatingProps) => {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
@@ -45,9 +44,9 @@ const Rating = ({ onSubmit }: RatingProps) => {
           </p>
         </div>
 
-        {/* Emoji Ratings */}
+        {/* Rating Options */}
         <div className="space-y-4">
-          <div className="flex justify-between items-center">
+          <div className="grid grid-cols-5 gap-2">
             {feedbackOptions.map((item, index) => (
               <button
                 key={index}
@@ -55,15 +54,17 @@ const Rating = ({ onSubmit }: RatingProps) => {
                 className="flex flex-col items-center gap-2"
               >
                 <div
-                  className={`text-3xl transition ${
-                    selectedRating === index
-                      ? "scale-125"
-                      : "opacity-70"
+                  className={`transition duration-200 ${
+                    selectedRating === index ? "scale-110" : "opacity-70"
                   }`}
                 >
-                  {item.emoji}
+                  <img
+                    src={item.imageUrl}
+                    alt={item.label}
+                    className="h-12 w-12 object-contain"
+                  />
                 </div>
-                <span className="text-xs text-gray-600">
+                <span className="text-center text-[11px] leading-tight text-gray-600">
                   {item.label}
                 </span>
               </button>
@@ -132,3 +133,4 @@ const Rating = ({ onSubmit }: RatingProps) => {
 };
 
 export default Rating;
+
