@@ -23,7 +23,7 @@ const Rating = ({ onSubmit,restaurant }: RatingProps) => {
         {/* Heading */}
         <div className="text-center space-y-0">
           <h2 className="text-xl font-semibold text-gray-700">
-            How was your experience with {restaurant?.name}?
+            How was your experience with us
           </h2>
         </div>
 
