@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Step1 } from "./Step1";
 import Step1N from "./Step1N";
 import ThankYouStep from "./ThankYouStep";
-import { FeedbackFlowProps } from "@/interface";
+import { FeedbackFlowProps, NegativeFeedbackSubmissionPayload } from "@/interface";
 import axios from "axios";
 
 
@@ -12,38 +12,52 @@ type CurrentStep = "step1" | "step1A" | "thankyou";
 
 const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const [currentStep, setCurrentStep] = useState<CurrentStep>("step1");
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
+  const [finalNote, setFinalNote] = useState("");
 
   const handleStep1Submit = (payload: {
     rating: number;
   }) => {
+    setSelectedRating(payload.rating);
     const isNegative = payload.rating <= 3;
-
-    void axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${restaurantId}`,
-      {
-        rating: payload.rating,
-        restaurantId,
-      }
-    ).catch(() => {
-      // Ignore network errors so the UI remains instant.
-    });
 
     if(isNegative){
       return  setCurrentStep("step1A");
     }
 
-    setCurrentStep("thankyou")
+    void axios
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${restaurantId}`, {
+        rating: payload.rating,
+        selectedPoints: [],
+        selectedPointIds: [],
+        feedback: "",
+        phone: "",
+        name: "",
+        restaurantId,
+      })
+      .catch(() => {
+        // Ignore network errors so the UI remains instant.
+      });
 
-
-  };
-
-  const handleNegativeSubmit = () => {
     setCurrentStep("thankyou");
   };
 
-  const handleGoogleRedirect = () => {
-    window.location.href = "https://www.google.com/maps";
+  const handleNegativeSubmit = (payload: NegativeFeedbackSubmissionPayload) => {
+    void axios
+      .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${restaurantId}`, {
+        rating: selectedRating,
+        selectedPoints: payload.selectedPoints,
+        selectedPointIds: payload.selectedPointIds,
+        feedback: payload.feedback,
+        phone: payload.phone,
+        name: payload.name,
+        restaurantId,
+      })
+      .catch(() => {
+        // Ignore network errors so the UI remains instant.
+      });
+
+    setCurrentStep("thankyou");
   };
 
   return (
@@ -57,35 +71,12 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
       {currentStep === "step1A" && (
         <Step1N restaurant={restaurant} onSubmit={handleNegativeSubmit} />
       )}
-      {currentStep === "thankyou" && <ThankYouStep restaurant={restaurant} />}
-
-      {isReviewModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Awesome, thank you.</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              You selected a positive rating. Would you like to share your experience
-              on Google?
-            </p>
-
-            <div className="space-y-2">
-              <button
-                type="button"
-                onClick={handleGoogleRedirect}
-                className="w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-medium hover:opacity-90 transition"
-              >
-                Go to Google Review
-              </button> 
-              <button
-                type="button"
-                onClick={() => setIsReviewModalOpen(false)}
-                className="w-full py-3 rounded-xl border border-gray-200 text-gray-700 text-sm font-medium"
-              >
-                Not now
-              </button>
-            </div>
-          </div>
-        </div>
+      {currentStep === "thankyou" && (
+        <ThankYouStep
+          restaurant={restaurant}
+          finalNote={finalNote}
+          onFinalNoteChange={setFinalNote}
+        />
       )}
     </div>
   );

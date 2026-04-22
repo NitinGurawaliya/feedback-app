@@ -1,14 +1,52 @@
 "use client";
 
 import { useState } from "react";
-import Input from "../common/Input";
 import { NegativeStepProps } from "@/interface";
+import { FeedbackTreeNode, NEGATIVE_FEEDBACK_TREE } from "@/constants";
+import NegativeStepHeader from "./negative/NegativeStepHeader";
+import NegativeOptionsList from "./negative/NegativeOptionsList";
+import NegativeDetailsForm from "./negative/NegativeDetailsForm";
+import NegativeStepActions from "./negative/NegativeStepActions";
 
 const NegativeStep = ({ onSubmit }: NegativeStepProps) => {
+  const [currentNodes, setCurrentNodes] = useState<FeedbackTreeNode[]>(
+    NEGATIVE_FEEDBACK_TREE
+  );
+  const [selectedNodes, setSelectedNodes] = useState<FeedbackTreeNode[]>([]);
   const [feedback, setFeedback] = useState("");
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
+  const [isFinalStep, setIsFinalStep] = useState(false);
   const isFeedbackEmpty = feedback.trim() === "";
+
+  const handleNodeSelect = (node: FeedbackTreeNode) => {
+    const nextSelected = [...selectedNodes, node];
+    setSelectedNodes(nextSelected);
+
+    if (node.children && node.children.length > 0 && nextSelected.length < 3) {
+      setCurrentNodes(node.children);
+      return;
+    }
+
+    setIsFinalStep(true);
+  };
+
+  const handleBack = () => {
+    if (isFinalStep) {
+      setIsFinalStep(false);
+    }
+
+    const nextSelected = selectedNodes.slice(0, -1);
+    setSelectedNodes(nextSelected);
+
+    if (nextSelected.length === 0) {
+      setCurrentNodes(NEGATIVE_FEEDBACK_TREE);
+      return;
+    }
+
+    const lastSelected = nextSelected[nextSelected.length - 1];
+    setCurrentNodes(lastSelected.children ?? NEGATIVE_FEEDBACK_TREE);
+  };
 
   const handleContinue = () => {
     if (isFeedbackEmpty) {
@@ -16,6 +54,8 @@ const NegativeStep = ({ onSubmit }: NegativeStepProps) => {
     }
 
     onSubmit?.({
+      selectedPointIds: selectedNodes.map((node) => node.id),
+      selectedPoints: selectedNodes.map((node) => node.label),
       feedback: feedback.trim(),
       phone: phone.trim(),
       name: name.trim(),
@@ -24,77 +64,32 @@ const NegativeStep = ({ onSubmit }: NegativeStepProps) => {
 
   return (
     <div className=" flex flex-col bg-white max-w-md mx-auto">
-      
-      {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto px-5 pt-8 pb-28 space-y-8">
+        <NegativeStepHeader />
 
+        {!isFinalStep && (
+          <NegativeOptionsList options={currentNodes} onSelect={handleNodeSelect} />
+        )}
 
-        {/* Heading */}
-        <div className="text-center space-y-2">
-          <h2 className="text-xl font-semibold text-gray-900">
-            We're listening
-          </h2>
-          <p className="text-sm text-gray-500 max-w-xs mx-auto leading-relaxed">
-            We're sorry we missed the mark. Your feedback helps us fix things right away.
-          </p>
-        </div>
-
-        {/* Detailed Feedback */}
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-gray-800">
-            Detailed Feedback
-          </p>
-          <textarea
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-            placeholder="What could we have done better? Be as specific as you'd like."
-            className="w-full h-32 p-4 text-sm border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gray-300 resize-none"
+        {isFinalStep && (
+          <NegativeDetailsForm
+            feedback={feedback}
+            phone={phone}
+            name={name}
+            onFeedbackChange={setFeedback}
+            onPhoneChange={setPhone}
+            onNameChange={setName}
           />
-        </div>
+        )}
 
-        {/* Phone */}
-        <Input
-          label="Phone number (for follow-up)"
-          placeholder="+91 00000 00000"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+        <NegativeStepActions
+          canGoBack={selectedNodes.length > 0}
+          showContinue={isFinalStep}
+          isContinueDisabled={isFeedbackEmpty}
+          onBack={handleBack}
+          onContinue={handleContinue}
         />
-
-        {/* Name */}
-        <Input
-          label="Name (Optional)"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        {/* Skip */}
-        <div className="text-center text-sm text-gray-500">
-          Skip – submit anonymously
-        </div>
-
-        {/* Privacy */}
-        <p className="text-xs text-gray-400 text-center leading-relaxed px-2">
-          Your privacy matters. Your phone number is only shared with the restaurant
-          management team to resolve your concern.
-        </p>
-            <div className="px-5 py-4  bg-white">
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={isFeedbackEmpty}
-          className={`w-full py-3.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition
-            ${
-              isFeedbackEmpty
-                ? "bg-white text-gray-400 border border-gray-200 cursor-not-allowed"
-                : "bg-gray-900 text-white hover:opacity-90"
-            }`}
-        >
-          Continue →
-        </button>
       </div>
-      </div>
-
     </div>
   );
 };

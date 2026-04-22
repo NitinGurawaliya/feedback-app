@@ -20,11 +20,7 @@ export interface RatingProps {
   }) => void;
 }
 export interface NegativeStepProps {
-  onSubmit?: (payload: {
-    feedback: string;
-    phone: string;
-    name: string;
-  }) => void;
+  onSubmit?: (payload: NegativeFeedbackSubmissionPayload) => void;
 }
 
 export interface NavbarProps {
@@ -71,9 +67,13 @@ export interface Step1NProps {
         logo?: string;
         location?: string;
     } | null;
-    onSubmit?: (payload: {
-        feedback: string;
-        phone: string;
-        name: string;
-    }) => void;
+    onSubmit?: (payload: NegativeFeedbackSubmissionPayload) => void;
+}
+
+export interface NegativeFeedbackSubmissionPayload {
+  selectedPointIds: string[];
+  selectedPoints: string[];
+  feedback: string;
+  phone: string;
+  name: string;
 }
