@@ -17,7 +17,7 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const handleStep1Submit = (payload: {
     rating: number;
   }) => {
-    const isPositive = payload.rating >= 4;
+    const isNegative = payload.rating <= 3;
 
     void axios.post(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${restaurantId}`,
@@ -29,15 +29,13 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
       // Ignore network errors so the UI remains instant.
     });
 
-   
-
-
-    if (isPositive) {
-      setIsReviewModalOpen(true);
-      return;
+    if(isNegative){
+      return  setCurrentStep("step1A");
     }
 
-    setCurrentStep("step1A");
+    setCurrentStep("thankyou")
+
+
   };
 
   const handleNegativeSubmit = () => {
