@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Step1 } from "./Step1";
 import Step1N from "./Step1N";
 import ThankYouStep from "./ThankYouStep";
@@ -12,9 +12,31 @@ type CurrentStep = "step1" | "step1A" | "step1Top" | "thankyou";
 
 const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const [currentStep, setCurrentStep] = useState<CurrentStep>("step1");
+  const [renderedStep, setRenderedStep] = useState<CurrentStep>("step1");
+  const [transitionState, setTransitionState] = useState<"in" | "out">("in");
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [selectedPointIds, setSelectedPointIds] = useState<string[]>([]);
   const [selectedPoints, setSelectedPoints] = useState<string[]>([]);
+  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (currentStep === renderedStep) {
+      return;
+    }
+
+    setTransitionState("out");
+
+    transitionTimeoutRef.current = setTimeout(() => {
+      setRenderedStep(currentStep);
+      setTransitionState("in");
+    }, 220);
+
+    return () => {
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, [currentStep, renderedStep]);
 
   const handleStep1Submit = (payload: {
     rating: number;
@@ -55,21 +77,29 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
       className="relative"
       data-restaurant-id={restaurant?.id ?? restaurantId ?? ""}
     >
-      {currentStep === "step1" && (
+      <div
+        className={`transition-all duration-280 ease-in-out ${
+          transitionState === "in"
+            ? "opacity-100 translate-y-0 scale-100 blur-0"
+            : "opacity-0 translate-y-2 scale-[0.985] blur-[1.5px] pointer-events-none"
+        }`}
+      >
+      {renderedStep === "step1" && (
         <Step1 restaurant={restaurant} onSubmit={handleStep1Submit} />
       )}
-      {currentStep === "step1A" && (
+      {renderedStep === "step1A" && (
         <Step1N restaurant={restaurant} onSubmit={handleNegativeSubmit} maxDepth={3} />
       )}
-      {currentStep === "step1Top" && (
+      {renderedStep === "step1Top" && (
         <Step1N restaurant={restaurant} onSubmit={handleNegativeSubmit} maxDepth={1} />
       )}
-      {currentStep === "thankyou" && (
+      {renderedStep === "thankyou" && (
         <ThankYouStep
           restaurant={restaurant}
           onSubmit={handleFinalSubmit}
         />
       )}
+      </div>
     </div>
   );
 };
