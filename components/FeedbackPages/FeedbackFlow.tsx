@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Step1 } from "./Step1";
 import Step1N from "./Step1N";
 import ThankYouStep from "./ThankYouStep";
-import { FeedbackFlowProps, FeedbackRating } from "@/interface";
+import { FeedbackFlowProps } from "@/interface";
 import axios from "axios";
 
 
@@ -14,19 +14,22 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const [currentStep, setCurrentStep] = useState<CurrentStep>("step1");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  const handleStep1Submit = async (payload: {
-    rating: FeedbackRating;
-    tags: string[];
-    message: string;
+  const handleStep1Submit = (payload: {
+    rating: number;
   }) => {
+    const isPositive = payload.rating >= 4;
 
+    void axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${restaurantId}`,
+      {
+        rating: payload.rating,
+        restaurantId,
+      }
+    ).catch(() => {
+      // Ignore network errors so the UI remains instant.
+    });
 
-    try {
-      // const res = await axios.post(`${process.env.BACKEND_URL}/`)
-    } catch (error) {
-      
-    }
-    const isPositive = payload.rating === "Excellent";
+   
 
 
     if (isPositive) {
@@ -44,9 +47,6 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const handleGoogleRedirect = () => {
     window.location.href = "https://www.google.com/maps";
   };
-
-
-  console.log("hllo from env",process.env.BACKEND_URL)
 
   return (
     <div

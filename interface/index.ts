@@ -16,9 +16,7 @@ export interface RatingProps {
     location?: string;
   } | null;
   onSubmit?: (payload: {
-    rating: FeedbackRating;
-    tags: string[];
-    message: string;
+    rating: number;
   }) => void;
 }
 export interface NegativeStepProps {
@@ -63,9 +61,7 @@ export interface Step1Props {
         location?: string;
     } | null;
     onSubmit?: (payload: {
-        rating: FeedbackRating;
-        tags: string[];
-        message: string;
+    rating: number;
     }) => void;
 }
 

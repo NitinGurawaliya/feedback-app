@@ -17,7 +17,7 @@ async function FeedbackContent({ params }: Pageprops) {
 
   try {
     const response = await fetch(
-      `https://dineinn-tier2-iota.vercel.app/api/restaurant/details/${id}`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/restaurant/details/${id}`,
       { cache: "no-store" }
     );
     
@@ -30,9 +30,6 @@ async function FeedbackContent({ params }: Pageprops) {
         logo:data.info.logo,
         location:data.info.location
       }
-
-      console.log(restaurant)
-
     }
   } catch {
     restaurant = null;
