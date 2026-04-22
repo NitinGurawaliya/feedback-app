@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Navbar from "../common/Navbar";
+import Input from "../common/Input";
 
 interface ThankYouStepProps {
   restaurant?: {
@@ -6,36 +10,59 @@ interface ThankYouStepProps {
     logo?: string;
     location?: string;
   } | null;
-  finalNote: string;
-  onFinalNoteChange: (value: string) => void;
+  onSubmit?: (payload: { feedback: string; phone: string }) => void;
 }
 
-const ThankYouStep = ({
-  restaurant,
-  finalNote,
-  onFinalNoteChange,
-}: ThankYouStepProps) => {
+const ThankYouStep = ({ restaurant, onSubmit }: ThankYouStepProps) => {
+  const [feedback, setFeedback] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    onSubmit?.({
+      feedback: feedback.trim(),
+      phone: phone.trim(),
+    });
+    setIsSubmitted(true);
+  };
+
   return (
     <div className="min-h-screen bg-white max-w-md mx-auto">
       <Navbar restaurant={restaurant} />
       <div className="px-5 pt-12 pb-10 text-center space-y-4">
         <h2 className="text-2xl font-semibold text-gray-900">Thank you</h2>
         <p className="text-sm text-gray-600 leading-relaxed">
-          Your feedback has been submitted successfully. We appreciate your time and
-          will use this to improve your next experience.
+          We appreciate your time and will use this to improve your next experience.
         </p>
 
-        <div className="space-y-2 text-left">
-          <label className="text-sm font-medium text-gray-800">
-            Anything else you want to add?
-          </label>
-          <input
-            value={finalNote}
-            onChange={(e) => onFinalNoteChange(e.target.value)}
-            placeholder="Optional final note"
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300"
-          />
-        </div>
+        {!isSubmitted ? (
+          <div className="space-y-4 text-left">
+            <Input
+              label="Detailed feedback"
+              placeholder="Tell us what we can improve"
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              textarea
+            />
+            <Input
+              label="Mobile number"
+              placeholder="+91 00000 00000"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              Submit
+            </button>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-600">
+            Your response has been recorded. Thank you for sharing your feedback.
+          </p>
+        )}
       </div>
     </div>
   );

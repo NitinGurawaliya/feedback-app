@@ -2,10 +2,10 @@ import { Step1NProps } from "@/interface"
 import Navbar from "../common/Navbar"
 import NegativeStep from "./NegativeStep"
 
-const Step1N = ({ restaurant, onSubmit }: Step1NProps) =>{
+const Step1N = ({ restaurant, onSubmit, maxDepth }: Step1NProps) =>{
     return <div>
         <Navbar restaurant={restaurant} />
-        <NegativeStep onSubmit={onSubmit} />
+        <NegativeStep onSubmit={onSubmit} maxDepth={maxDepth} />
     </div>
 }
 
