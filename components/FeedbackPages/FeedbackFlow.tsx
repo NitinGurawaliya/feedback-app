@@ -16,10 +16,6 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const [transitionState, setTransitionState] = useState<"in" | "out">("in");
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [feedbackId, setFeedbackId] = useState<string | null>(null);
-  const [pendingDetailsPayload, setPendingDetailsPayload] = useState<{
-    feedback: string;
-    phone: string;
-  } | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -54,20 +50,6 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
     setCurrentStep("step1Top");
   };
 
-  const submitDetailsByFeedbackId = (
-    targetFeedbackId: string,
-    payload: { feedback: string; phone: string }
-  ) => {
-    void axios
-      .patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${targetFeedbackId}`, {
-        message: payload.feedback,
-        contactNumber: payload.phone,
-      })
-      .catch(() => {
-        // Ignore network errors.
-      });
-  };
-
   const handleNegativeSubmit = (
     payload: NegativeFeedbackSubmissionPayload
   ) => {
@@ -89,24 +71,6 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
       .catch(() => {
         // Ignore network errors so the user can continue.
       });
-  };
-
-  useEffect(() => {
-    if (!feedbackId || !pendingDetailsPayload) {
-      return;
-    }
-
-    submitDetailsByFeedbackId(feedbackId, pendingDetailsPayload);
-    setPendingDetailsPayload(null);
-  }, [feedbackId, pendingDetailsPayload]);
-
-  const handleFinalSubmit = (payload: { feedback: string; phone: string }) => {
-    if (!feedbackId) {
-      setPendingDetailsPayload(payload);
-      return;
-    }
-
-    submitDetailsByFeedbackId(feedbackId, payload);
   };
 
   return (
@@ -133,7 +97,8 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
       {renderedStep === "thankyou" && (
         <ThankYouStep
           restaurant={restaurant}
-          onSubmit={handleFinalSubmit}
+          rating={selectedRating}
+          feedbackId={feedbackId}
         />
       )}
       </div>
