@@ -46,7 +46,10 @@ const FeedbackBottomSheet = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center overflow-hidden px-3 pt-3 sm:px-4 sm:pt-4"
+      style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
+    >
       <button
         type="button"
         aria-label="Dismiss bottom sheet"
@@ -56,12 +59,14 @@ const FeedbackBottomSheet = ({
         }`}
       />
       <div
-        className={`relative w-full max-w-md max-h-[calc(100dvh-0.75rem)] overflow-y-auto overscroll-contain rounded-2xl bg-white p-4 sm:p-5 shadow-2xl transition-all duration-240 ${
+        className={`relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl transition-all duration-240 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
         }`}
       >
-        <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-gray-200" />
-        {children}
+        <div className="max-h-[min(78svh,640px)] overflow-y-auto overscroll-contain p-4 sm:max-h-[min(82svh,680px)] sm:p-5" style={{ paddingBottom: "max(env(safe-area-inset-bottom), 1rem)" }}>
+          <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-gray-200" />
+          {children}
+        </div>
       </div>
     </div>
   );
