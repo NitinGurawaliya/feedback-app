@@ -34,7 +34,7 @@ async function FeedbackContent({ params }: Pageprops) {
         name: data?.info?.restaurantName,
         logo: data?.info?.logo,
         location: data?.info?.location,
-        googlePlaceId: data?.info?.googlePlaceId ?? data?.info?.google_place_id ?? null,
+        googlePlacedId: data?.info?.googlePlacedId ?? data?.info?.googlePlacedId ?? null,
       };
     }
   } catch {
