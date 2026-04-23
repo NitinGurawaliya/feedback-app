@@ -11,7 +11,7 @@ interface ThankYouStepProps {
     name?: string;
     logo?: string;
     location?: string;
-    googlePlaceId?: string | null;
+    googlePlacedId?: string | null;
   } | null;
   rating: number | null;
   feedbackId: string | null;
@@ -22,13 +22,13 @@ type NegativeSheetState = "prompt" | "contact" | "sending" | "done" | "error";
 const ThankYouStep = ({ restaurant, rating, feedbackId }: ThankYouStepProps) => {
   const isNegative = (rating ?? 0) <= 3;
   const isPositive = (rating ?? 0) >= 4;
-  const hasGooglePlaceId = Boolean(restaurant?.googlePlaceId?.trim());
+  const hasGooglePlaceId = Boolean(restaurant?.googlePlacedId?.trim());
   const googleReviewUrl = useMemo(() => {
-    if (!restaurant?.googlePlaceId) {
+    if (!restaurant?.googlePlacedId) {
       return "";
     }
-    return `https://search.google.com/local/writereview?placeid=${restaurant.googlePlaceId}`;
-  }, [restaurant?.googlePlaceId]);
+    return `https://search.google.com/local/writereview?placeid=${restaurant.googlePlacedId}`;
+  }, [restaurant?.googlePlacedId]);
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [negativeSheetState, setNegativeSheetState] =
