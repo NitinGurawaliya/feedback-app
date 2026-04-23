@@ -7,6 +7,7 @@ export interface RestaurantDetails {
   name?: string;
   logo:string
   location:string
+  googlePlacedId?: string | null;
 }
 
 export interface RatingProps {
@@ -48,6 +49,7 @@ export interface FeedbackFlowProps {
     name?: string;
     logo?: string;
     location?: string;
+    googlePlacedId?: string | null;
   } | null;
 }
 
