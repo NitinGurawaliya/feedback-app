@@ -28,12 +28,25 @@ const FeedbackBottomSheet = ({
     return () => clearTimeout(timeoutId);
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isMounted) {
+      return;
+    }
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [isMounted]);
+
   if (!isMounted) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center overflow-hidden px-3 pb-3 sm:px-4 sm:pb-4">
       <button
         type="button"
         aria-label="Dismiss bottom sheet"
@@ -43,10 +56,11 @@ const FeedbackBottomSheet = ({
         }`}
       />
       <div
-        className={`relative w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl transition-all duration-240 ${
+        className={`relative w-full max-w-md max-h-[calc(100dvh-0.75rem)] overflow-y-auto overscroll-contain rounded-2xl bg-white p-4 sm:p-5 shadow-2xl transition-all duration-240 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
         }`}
       >
+        <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-gray-200" />
         {children}
       </div>
     </div>
