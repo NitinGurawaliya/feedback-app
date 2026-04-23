@@ -63,7 +63,7 @@ const ThankYouStep = ({ restaurant, rating, feedbackId }: ThankYouStepProps) => 
     setNegativeSheetState("sending");
 
     try {
-      await axios.patch(`/api/feedback/${feedbackId}`, {
+      await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${feedbackId}`, {
         customerContact: phone.trim(),
         status: "COMPLETE",
       });
