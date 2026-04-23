@@ -15,8 +15,11 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
   const [renderedStep, setRenderedStep] = useState<CurrentStep>("step1");
   const [transitionState, setTransitionState] = useState<"in" | "out">("in");
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
-  const [selectedPointIds, setSelectedPointIds] = useState<string[]>([]);
-  const [selectedPoints, setSelectedPoints] = useState<string[]>([]);
+  const [feedbackId, setFeedbackId] = useState<string | null>(null);
+  const [pendingDetailsPayload, setPendingDetailsPayload] = useState<{
+    feedback: string;
+    phone: string;
+  } | null>(null);
   const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -51,25 +54,59 @@ const FeedbackFlow = ({ restaurantId, restaurant }: FeedbackFlowProps) => {
     setCurrentStep("step1Top");
   };
 
-  const handleNegativeSubmit = (payload: NegativeFeedbackSubmissionPayload) => {
-    setSelectedPointIds(payload.selectedPointIds);
-    setSelectedPoints(payload.selectedPoints);
-    setCurrentStep("thankyou");
+  const submitDetailsByFeedbackId = (
+    targetFeedbackId: string,
+    payload: { feedback: string; phone: string }
+  ) => {
+    void axios
+      .patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${targetFeedbackId}`, {
+        message: payload.feedback,
+        contactNumber: payload.phone,
+      })
+      .catch(() => {
+        // Ignore network errors.
+      });
   };
 
-  const handleFinalSubmit = (payload: { feedback: string; phone: string }) => {
+  const handleNegativeSubmit = (
+    payload: NegativeFeedbackSubmissionPayload
+  ) => {
+    // Do not block UX on API completion.
+    setCurrentStep("thankyou");
+
     void axios
       .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/feedback/${restaurantId}`, {
         rating: selectedRating,
-        selectedPoints,
-        selectedPointIds,
-        feedback: payload.feedback,
-        phone: payload.phone,
-        restaurantId,
+        selectedPoints: payload.selectedPoints,
+        selectedPointIds: payload.selectedPointIds,
+      })
+      .then((response) => {
+        const receivedFeedbackId = response.data?.feedbackId;
+        if (receivedFeedbackId) {
+          setFeedbackId(String(receivedFeedbackId));
+        }
       })
       .catch(() => {
-        // Ignore network errors so the UI remains instant.
+        // Ignore network errors so the user can continue.
       });
+  };
+
+  useEffect(() => {
+    if (!feedbackId || !pendingDetailsPayload) {
+      return;
+    }
+
+    submitDetailsByFeedbackId(feedbackId, pendingDetailsPayload);
+    setPendingDetailsPayload(null);
+  }, [feedbackId, pendingDetailsPayload]);
+
+  const handleFinalSubmit = (payload: { feedback: string; phone: string }) => {
+    if (!feedbackId) {
+      setPendingDetailsPayload(payload);
+      return;
+    }
+
+    submitDetailsByFeedbackId(feedbackId, payload);
   };
 
   return (

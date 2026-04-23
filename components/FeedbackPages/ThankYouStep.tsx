@@ -10,15 +10,19 @@ interface ThankYouStepProps {
     logo?: string;
     location?: string;
   } | null;
-  onSubmit?: (payload: { feedback: string; phone: string }) => void;
+  onSubmit?: (payload: { feedback: string; phone: string }) => Promise<void> | void;
 }
 
 const ThankYouStep = ({ restaurant, onSubmit }: ThankYouStepProps) => {
   const [feedback, setFeedback] = useState("");
   const [phone, setPhone] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const isFormValid = feedback.trim() !== "" && phone.trim() !== "";
 
   const handleSubmit = () => {
+    if (!isFormValid) {
+      return;
+    }
     onSubmit?.({
       feedback: feedback.trim(),
       phone: phone.trim(),
@@ -53,7 +57,12 @@ const ThankYouStep = ({ restaurant, onSubmit }: ThankYouStepProps) => {
             <button
               type="button"
               onClick={handleSubmit}
-              className="w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-medium text-white transition hover:opacity-90"
+              disabled={!isFormValid}
+              className={`w-full rounded-xl px-4 py-3 text-sm font-medium text-white transition ${
+                isFormValid
+                  ? "bg-gray-900 hover:opacity-90"
+                  : "bg-gray-300 cursor-not-allowed"
+              }`}
             >
               Submit
             </button>
