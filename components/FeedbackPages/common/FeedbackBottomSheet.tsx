@@ -21,7 +21,8 @@ const FeedbackBottomSheet = ({
       setIsMounted(true);
       const frameId = requestAnimationFrame(() => setIsVisible(true));
       return () => cancelAnimationFrame(frameId);
-    }
+    }     
+    
 
     setIsVisible(false);
     const timeoutId = setTimeout(() => setIsMounted(false), 240);
