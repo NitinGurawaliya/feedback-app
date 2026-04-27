@@ -8,7 +8,7 @@ export default function SigninComp(){
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
         }>
-            <Signin backendUrl={process.env.NEXT_PUBLIC_BACKEND_URL ||""}
+            <Signin redirectUrl="/dashboard" backendUrl={process.env.NEXT_PUBLIC_BACKEND_URL ||""}
               
              />
         </Suspense>
