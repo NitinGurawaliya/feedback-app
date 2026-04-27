@@ -39,12 +39,12 @@ const ThankYouStep = ({ restaurant, rating, feedbackId }: ThankYouStepProps) => 
 
   useEffect(() => {
     if (isNegative) {
-      const timeoutId = setTimeout(() => setIsSheetOpen(true), 1000);
+      const timeoutId = setTimeout(() => setIsSheetOpen(true), 500);
       return () => clearTimeout(timeoutId);
     }
 
     if (isPositive && hasGooglePlaceId) {
-      const timeoutId = setTimeout(() => setIsSheetOpen(true), 2000);
+      const timeoutId = setTimeout(() => setIsSheetOpen(true), 500);
       return () => clearTimeout(timeoutId);
     }
   }, [hasGooglePlaceId, isNegative, isPositive]);

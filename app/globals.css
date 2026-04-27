@@ -2,9 +2,15 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@source "../node_modules/@nitin201/reviews-dashboard-component/dist";
+
+@source "../node_modules/@nitin201/zayka-auth/dist/**/*.mjs";
+
+@source "../node_modules/@nitin201/zayka-auth/dist";
+
 @custom-variant dark (&:is(.dark *));
  
- :root {
+:root {
   --background: #d85151;
   --foreground: #171717;
 }
