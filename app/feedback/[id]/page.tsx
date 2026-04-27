@@ -27,6 +27,8 @@ async function FeedbackContent({ params }: Pageprops) {
       { cache: "no-store" }
     );
 
+    console.log(response);
+
     if (response.ok) {
       const data = await response.json();
       restaurant = {
@@ -37,8 +39,10 @@ async function FeedbackContent({ params }: Pageprops) {
         googlePlacedId: data?.info?.googlePlacedId ?? data?.info?.googlePlacedId ?? null,
       };
     }
-  } catch {
+  } catch (error) {
     restaurant = null;
+    console.log(restaurant);
+    console.log("error",error);
   }
 
   return <FeedbackFlow restaurantId={id} restaurant={restaurant} />;
