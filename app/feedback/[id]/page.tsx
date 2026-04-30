@@ -1,6 +1,5 @@
-
-import FeedbackFlow from "@/components/FeedbackPages/FeedbackFlow";
-import { RestaurantDetails } from "@/interface";
+import type { RestaurantDetails } from "../../../packages/feedback/src";
+import PackageFeedbackClient from "./PackageFeedbackClient";
 import { Suspense } from "react";
 
 interface Pageprops {
@@ -11,7 +10,7 @@ interface Pageprops {
 
 export default async function FeedbackPage({ params }: Pageprops) {
   return (
-    <Suspense fallback={<FeedbackFlow restaurant={null} />}>
+    <Suspense fallback={<PackageFeedbackClient restaurantId="demo-restaurant-id" restaurant={null} />}>
       <FeedbackContent params={params} />
     </Suspense>
   );
@@ -45,5 +44,5 @@ async function FeedbackContent({ params }: Pageprops) {
     console.log("error",error);
   }
 
-  return <FeedbackFlow restaurantId={id} restaurant={restaurant} />;
+  return <PackageFeedbackClient restaurantId={id} restaurant={restaurant} />;
 }
