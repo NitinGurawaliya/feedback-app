@@ -1,7 +1,8 @@
 "use client";
+
 import { useState } from "react";
-import { feedbackOptions } from "@/constants";
-import { RatingProps } from "@/interface";
+import { feedbackOptions } from "../../constants/feedbackOptions";
+import type { RatingProps } from "../../types/internal";
 
 const fallbackRatingIcon = (rating: number): string => {
   const fallbackMap: Record<number, string> = {
@@ -14,37 +15,29 @@ const fallbackRatingIcon = (rating: number): string => {
   return fallbackMap[rating] ?? "⭐";
 };
 
-const Rating = ({ onSubmit,restaurant }: RatingProps) => {
+const Rating = ({ onSubmit }: RatingProps) => {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [failedImages, setFailedImages] = useState<Record<number, boolean>>({});
 
   const handleRatingSelect = (rating: number) => {
     setSelectedRating(rating);
-
-    onSubmit?.({
-      rating,
-    });
+    onSubmit?.({ rating });
   };
 
   return (
     <div className="h-full flex flex-col bg-white max-w-md lg:max-w-3xl mx-auto">
-      
-      {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto px-5 pt-8 pb-24 space-y-10">
-        
-        {/* Heading */}
         <div className="text-center space-y-0">
           <h2 className="text-xl font-semibold text-gray-700">
             How was your experience with us
           </h2>
         </div>
 
-        {/* Rating Options */}
         <div className="space-y-2">
           <div className="flex flex-col items-center gap-6 pt-2 lg:flex-row lg:justify-center lg:gap-6">
-            {feedbackOptions.map((item, index) => (
+            {feedbackOptions.map((item) => (
               <button
-                key={index}
+                key={item.rating}
                 type="button"
                 onClick={() => handleRatingSelect(item.rating)}
                 className="flex w-24 flex-col items-center gap-2"
@@ -73,7 +66,7 @@ const Rating = ({ onSubmit,restaurant }: RatingProps) => {
                   )}
                 </div>
                 <span className="text-center text-[11px] leading-tight text-gray-600">
-                  {item.label}  
+                  {item.label}
                 </span>
               </button>
             ))}
@@ -85,4 +78,3 @@ const Rating = ({ onSubmit,restaurant }: RatingProps) => {
 };
 
 export default Rating;
-
